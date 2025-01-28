@@ -9,6 +9,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { EmployeeComponent } from '../components/employee/employee.component';
 import { DialogComponent } from '../components/dialog/dialog.component';
 import { LeaveTypeComponent } from '../components/leave-types/leave-types.component';
+import { LeaveApplicationStatusesComponent } from '../components/leave-application-statuses/leave-application-statuses.component';
+import { LeaveApplicationActionsComponent } from '../components/leave-application-actions/leave-application-actions.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { LeaveTypeComponent } from '../components/leave-types/leave-types.compon
     LoginComponent,
     EmployeeComponent,
     DialogComponent,
-    LeaveTypeComponent
+    LeaveTypeComponent,
+    LeaveApplicationStatusesComponent,
+    LeaveApplicationActionsComponent
   ],
   imports: [
     BrowserModule,

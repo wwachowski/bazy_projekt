@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 const dbConfig = {
   user: 'c##projekt',
   password: 'qwerty',
-  connectString: '192.168.56.1:1521/XE'
+  connectString: 'localhost:1521/XE'
 };
 
 // Endpoint do logowania
@@ -308,6 +308,355 @@ app.get('/api/users', async (req, res) => {
     }
   }
 });
+
+// Backend endpoints for LeaveApplicationsStatuses
+
+// Endpoint to add a new Leave Application Status
+app.post('/api/leave-application-statuses', async (req, res) => {
+  console.log(req.body);
+  const { IS_INITIAL, NAME, CODE } = req.body; // Properties in CAPS_LOCK
+  const is_initial = IS_INITIAL;
+  const name = NAME;
+  const code = CODE;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `INSERT INTO LeaveApplicationsStatuses (id, is_initial, name, code)
+      VALUES (leave_app_statuses_seq.NEXTVAL, :is_initial, :name, :code)`,
+      [is_initial, name, code],
+      { autoCommit: true }
+    );
+
+    res.json({ success: true, message: 'Nowy status aplikacji urlopowej został dodany' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to update an existing Leave Application Status
+app.put('/api/leave-application-statuses/:id', async (req, res) => {
+  const statusId = req.params.id;
+  const { IS_INITIAL, NAME, CODE } = req.body; // Properties in CAPS_LOCK
+  const is_initial = IS_INITIAL;
+  const name = NAME;
+  const code = CODE;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `UPDATE LeaveApplicationsStatuses 
+      SET is_initial = :is_initial, name = :name, code = :code 
+      WHERE id = :id`,
+      [is_initial, name, code, statusId],
+      { autoCommit: true }
+    );
+
+    if (result.rowsAffected > 0) {
+      res.json({ success: true, message: 'Status aplikacji urlopowej zaktualizowany pomyślnie' });
+    } else {
+      res.status(404).json({ success: false, message: 'Nie znaleziono statusu aplikacji urlopowej' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to fetch all Leave Application Statuses
+app.get('/api/leave-application-statuses', async (req, res) => {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(`SELECT * FROM LeaveApplicationsStatuses`);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to delete a Leave Application Status
+app.delete('/api/leave-application-statuses/:id', async (req, res) => {
+  const statusId = req.params.id;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `DELETE FROM LeaveApplicationsStatuses WHERE id = :id`,
+      [statusId],
+      { autoCommit: true }
+    );
+
+    if (result.rowsAffected > 0) {
+      res.json({ success: true, message: 'Status aplikacji urlopowej został usunięty' });
+    } else {
+      res.status(404).json({ success: false, message: 'Nie znaleziono statusu aplikacji urlopowej' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to add a new Leave Application Action
+app.post('/api/leave-application-actions', async (req, res) => {
+  console.log(req.body);
+  const {
+    SOURCE_STATUS_ID,
+    DESTINATION_STATUS_ID,
+    NAME,
+    COLOR,
+    ACTION_INDEX,
+    DESCRIPTION,
+    AVAILABILITY_ROLE
+  } = req.body; // Properties in CAPS_LOCK
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `INSERT INTO LeaveApplicationsActions (id, source_status_id, destination_status_id, name, color, action_index, description, availability_role)
+      VALUES (leave_app_actions_seq.NEXTVAL, :source_status_id, :destination_status_id, :name, :color, :action_index, :description, :availability_role)`,
+      [SOURCE_STATUS_ID, DESTINATION_STATUS_ID, NAME, COLOR, ACTION_INDEX, DESCRIPTION, AVAILABILITY_ROLE],
+      { autoCommit: true }
+    );
+
+    res.json({ success: true, message: 'Nowa akcja została dodana' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to update an existing Leave Application Action
+app.put('/api/leave-application-actions/:id', async (req, res) => {
+  const actionId = req.params.id;
+  const {
+    SOURCE_STATUS_ID,
+    DESTINATION_STATUS_ID,
+    NAME,
+    COLOR,
+    ACTION_INDEX,
+    DESCRIPTION,
+    AVAILABILITY_ROLE
+  } = req.body; // Properties in CAPS_LOCK
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `UPDATE LeaveApplicationsActions 
+      SET source_status_id = :source_status_id, 
+          destination_status_id = :destination_status_id, 
+          name = :name, 
+          color = :color, 
+          action_index = :action_index, 
+          description = :description, 
+          availability_role = :availability_role 
+      WHERE id = :id`,
+      [
+        SOURCE_STATUS_ID,
+        DESTINATION_STATUS_ID,
+        NAME,
+        COLOR,
+        ACTION_INDEX,
+        DESCRIPTION,
+        AVAILABILITY_ROLE,
+        actionId
+      ],
+      { autoCommit: true }
+    );
+
+    if (result.rowsAffected > 0) {
+      res.json({ success: true, message: 'Akcja została zaktualizowana pomyślnie' });
+    } else {
+      res.status(404).json({ success: false, message: 'Nie znaleziono akcji' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to fetch all Leave Application Actions
+app.get('/api/leave-application-actions', async (req, res) => {
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(`SELECT * FROM LeaveApplicationsActions`);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint to delete a Leave Application Action
+app.delete('/api/leave-application-actions/:id', async (req, res) => {
+  const actionId = req.params.id;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `DELETE FROM LeaveApplicationsActions WHERE id = :id`,
+      [actionId],
+      { autoCommit: true }
+    );
+
+    if (result.rowsAffected > 0) {
+      res.json({ success: true, message: 'Akcja została usunięta' });
+    } else {
+      res.status(404).json({ success: false, message: 'Nie znaleziono akcji' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+app.get('/api/subordinates/:manager_id', async (req, res) => {
+  const managerId = req.params.manager_id;
+  console.log(managerId);
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Wywołanie funkcji z kursorem
+    const result = await connection.execute(
+      `BEGIN
+         :result := GetSubordinates(:manager_id);
+       END;`,
+      {
+        result: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }, // BIND_OUT dla kursora
+        manager_id: managerId
+      }
+    );
+
+    // Odczyt danych z kursora
+    const cursor = result.outBinds.result;
+    const rows = await cursor.getRows();
+
+    // Zwrócenie wyników w formacie JSON
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
+// Endpoint do pobierania dni urlopu pracownika
+app.get('/api/leave-days/:employee_id', async (req, res) => {
+  const employeeId = req.params.employee_id;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    
+    // Wywołanie funkcji GetLeaveDays z bazy danych
+    const result = await connection.execute(
+      `BEGIN
+         :result := GetLeaveDays(:employee_id);
+       END;`,
+      {
+        employee_id: employeeId,
+        result: { type: oracledb.STRING, dir: oracledb.BIND_OUT } // wynik funkcji
+      }
+    );
+
+    // Odpowiedź z dniami urlopu
+    res.json({ success: true, leaveDays: result.outBinds.result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera' });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+});
+
 
 // Uruchomienie serwera
 app.listen(port, () => {

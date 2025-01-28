@@ -1,0 +1,162 @@
+<div class="container">
+  <h2 class="title">Akcje Wniosków Urlopowych</h2>
+  <button class="btn-add" (click)="addAction()">Dodaj Nową Akcję</button>
+
+  <!-- Formularz dodawania akcji -->
+  <div *ngIf="isAdding" class="add-action-form">
+    <h3>Dodaj Nową Akcję</h3>
+    <form (ngSubmit)="submitNewAction()">
+      <div class="form-group">
+        <label for="name">Nazwa Akcji</label>
+        <input type="text" id="name" [(ngModel)]="newAction.NAME" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="color">Kolor Akcji</label>
+        <input type="text" id="color" [(ngModel)]="newAction.COLOR" name="color" />
+      </div>
+      <div class="form-group">
+        <label for="sourceStatus">ID Statusu Źródłowego</label>
+        <input
+          type="number"
+          id="sourceStatus"
+          [(ngModel)]="newAction.SOURCE_STATUS_ID"
+          name="sourceStatus"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="destinationStatus">ID Statusu Docelowego</label>
+        <input
+          type="number"
+          id="destinationStatus"
+          [(ngModel)]="newAction.DESTINATION_STATUS_ID"
+          name="destinationStatus"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="actionIndex">Indeks Akcji</label>
+        <input
+          type="number"
+          id="actionIndex"
+          [(ngModel)]="newAction.ACTION_INDEX"
+          name="actionIndex"
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">Opis Akcji</label>
+        <textarea
+          id="description"
+          [(ngModel)]="newAction.DESCRIPTION"
+          name="description"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="availabilityRole">Rola Dostępności</label>
+        <select
+          id="availabilityRole"
+          [(ngModel)]="newAction.AVAILABILITY_ROLE"
+          name="availabilityRole"
+          required
+        >
+          <option value="ALL">Wszyscy</option>
+          <option value="OWNER">Właściciel</option>
+          <option value="ASSIGNEE">Przypisany</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-save">Zapisz</button>
+      <button type="button" class="btn-cancel" (click)="cancelAdd()">Anuluj</button>
+    </form>
+  </div>
+
+  <!-- Tabela akcji -->
+  <table class="table" *ngIf="!isAdding">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Źródło</th>
+        <th>Cel</th>
+        <th>Nazwa</th>
+        <th>Kolor</th>
+        <th>Indeks</th>
+        <th>Opis</th>
+        <th>Rola</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let action of actions">
+        <td>{{ action.ID }}</td>
+        <td>{{ action.SOURCE_STATUS_ID }}</td>
+        <td>{{ action.DESTINATION_STATUS_ID }}</td>
+        <td>
+          <span *ngIf="!isEditing || editedAction?.ID !== action.ID">{{ action.NAME }}</span>
+          <input
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+            [(ngModel)]="editedAction!.NAME"
+          />
+        </td>
+        <td>
+          <span *ngIf="!isEditing || editedAction?.ID !== action.ID">{{ action.COLOR }}</span>
+          <input
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+            [(ngModel)]="editedAction!.COLOR"
+          />
+        </td>
+        <td>
+          <span *ngIf="!isEditing || editedAction?.ID !== action.ID">{{ action.ACTION_INDEX }}</span>
+          <input
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+            [(ngModel)]="editedAction!.ACTION_INDEX"
+          />
+        </td>
+        <td>
+          <span *ngIf="!isEditing || editedAction?.ID !== action.ID">{{ action.DESCRIPTION }}</span>
+          <input
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+            [(ngModel)]="editedAction!.DESCRIPTION"
+          />
+        </td>
+        <td>
+          <span *ngIf="!isEditing || editedAction?.ID !== action.ID">
+            {{ action.AVAILABILITY_ROLE }}
+          </span>
+          <select
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+            [(ngModel)]="editedAction!.AVAILABILITY_ROLE"
+          >
+            <option value="ALL">Wszyscy</option>
+            <option value="OWNER">Właściciel</option>
+            <option value="ASSIGNEE">Przypisany</option>
+          </select>
+        </td>
+        <td class="actions">
+          <button
+            class="btn-edit"
+            (click)="startEdit(action)"
+            *ngIf="!isEditing"
+          >
+            Edytuj
+          </button>
+          <button
+            class="btn-cancel"
+            (click)="cancelEdit()"
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+          >
+            Anuluj
+          </button>
+          <button
+            class="btn-save"
+            (click)="saveEdit()"
+            *ngIf="isEditing && editedAction?.ID === action.ID"
+          >
+            Zapisz
+          </button>
+          <button class="btn-delete" (click)="deleteAction(action.ID)">
+            Usuń
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
