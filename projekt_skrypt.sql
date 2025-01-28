@@ -116,6 +116,7 @@ CREATE SEQUENCE employees_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE employees_relations_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE leave_applications_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE leave_applications_actions_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE leave_types_seq START WITH 1 INCREMENT BY 1;
 
 -- Feedujemy podstawowe dane
 INSERT INTO Users (id, first_name, last_name, email, password, user_type) VALUES (users_seq.NEXTVAL, 'Adam', 'Kowalski', 'adam.kowalski@example.com', 'password123', 'N');
@@ -134,9 +135,9 @@ INSERT INTO EmployeesRelations (id, subordinate_id, manager_id) VALUES (employee
 INSERT INTO EmployeesRelations (id, subordinate_id, manager_id) VALUES (employees_relations_seq.NEXTVAL, 3, 4);
 INSERT INTO EmployeesRelations (id, subordinate_id, manager_id) VALUES (employees_relations_seq.NEXTVAL, 2, 4);
 
-INSERT INTO LeaveTypes (id, caption, code) VALUES (leave_applications_seq.NEXTVAL, 'Urlop wypoczynkowy', 'WYP');
-INSERT INTO LeaveTypes (id, caption, code) VALUES (leave_applications_seq.NEXTVAL, 'Urlop na żądanie', 'ŻĄD');
-INSERT INTO LeaveTypes (id, caption, code) VALUES (leave_applications_seq.NEXTVAL, 'Urlop opiekuńczy', 'OPI');
+INSERT INTO LeaveTypes (id, caption, code) VALUES (leave_types_seq.NEXTVAL, 'Urlop wypoczynkowy', 'WYP');
+INSERT INTO LeaveTypes (id, caption, code) VALUES (leave_types_seq.NEXTVAL, 'Urlop na żądanie', 'ŻĄD');
+INSERT INTO LeaveTypes (id, caption, code) VALUES (leave_types_seq.NEXTVAL, 'Urlop opiekuńczy', 'OPI');
 
 INSERT INTO LeaveApplicationsStatuses (id, is_initial, name, code) VALUES (1, 1, 'Nowy', 'NOWY');
 INSERT INTO LeaveApplicationsStatuses (id, is_initial, name, code) VALUES (2, 0, 'Złożony', 'ZŁOŻ');
