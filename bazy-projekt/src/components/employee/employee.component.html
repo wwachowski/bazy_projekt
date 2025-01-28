@@ -1,0 +1,42 @@
+<!-- src/app/components/employee-crud/employee-crud.component.html -->
+<div class="container">
+  <h2>Pracownicy</h2>
+  <button (click)="addEmployee()">Dodaj Pracownika</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Typ Pracownika</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of employees">
+        <td>{{ employee.ID }}</td>
+        <td>
+          <!-- Wartość typu pracownika wyświetlana jako tekst -->
+          <span *ngIf="!isEditing || editedEmployee?.ID !== employee.ID">
+            {{ employee.EMPLOYEE_TYPE == 'N' ? 'Normalny' : 'Administrator' }}
+          </span>
+
+          <!-- Combo box w trybie edycji -->
+          <select
+            *ngIf="isEditing && editedEmployee?.ID === employee.ID"
+            [(ngModel)]="editedEmployee!.EMPLOYEE_TYPE"
+            [disabled]="!isEditing"
+          >
+            <option value="N">Normalny</option>
+            <option value="A">Administrator</option>
+          </select>
+        </td>
+        <td>
+          <!-- Przyciski edycji -->
+          <button (click)="startEdit(employee)" *ngIf="!isEditing">Edytuj</button>
+          <button (click)="cancelEdit()" *ngIf="isEditing && editedEmployee?.ID === employee.ID">Anuluj</button>
+          <button (click)="saveEdit()" *ngIf="isEditing && editedEmployee?.ID === employee.ID">Zapisz</button>
+          <button (click)="deleteEmployee(employee.ID)">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

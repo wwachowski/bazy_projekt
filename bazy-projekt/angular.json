@@ -60,7 +60,17 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "buildOptimizer": false,
+              "sourceMap": true,
+              "optimization": false,
+              "extractCss": true,
+              "vendorChunk": true,
+              "commonChunk": true,
+              "namedChunks": true,
+              "stylePreprocessorOptions": {
+                "includePaths": []
+              }
             }
           },
           "defaultConfiguration": "production"
