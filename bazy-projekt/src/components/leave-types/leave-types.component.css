@@ -32,8 +32,8 @@
   background-color: #45a049;
 }
 
-/* Formularz dodawania pracownika */
-.add-employee-form {
+/* Formularz dodawania typu urlopu */
+.add-leave-type-form {
   margin-bottom: 20px;
   padding: 20px;
   border: 1px solid #ddd;
@@ -42,7 +42,7 @@
   margin: 20px auto;
 }
 
-.add-employee-form h3 {
+.add-leave-type-form h3 {
   text-align: center;
   margin-bottom: 20px;
 }
@@ -55,7 +55,7 @@ label {
   font-size: 16px;
 }
 
-input, select {
+input {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -131,12 +131,4 @@ button:hover {
 .btn-delete {
   background-color: #dc3545;
   color: white;
-}
-
-/* Stylowanie dla selecta */
-select {
-  padding: 5px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
 }

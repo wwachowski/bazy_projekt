@@ -7,12 +7,16 @@ import { LoginComponent } from '../components/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
 import { EmployeeComponent } from '../components/employee/employee.component';
+import { DialogComponent } from '../components/dialog/dialog.component';
+import { LeaveTypeComponent } from '../components/leave-types/leave-types.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    DialogComponent,
+    LeaveTypeComponent
   ],
   imports: [
     BrowserModule,

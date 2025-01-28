@@ -1,0 +1,56 @@
+<div class="container">
+  <h2 class="title">Typy Urlopów</h2>
+  <button class="btn-add" (click)="addLeaveType()">Dodaj Typ Urlopu</button>
+
+  <!-- Formularz dodawania typu urlopu -->
+  <div *ngIf="isAdding" class="add-leave-type-form">
+    <h3>Dodaj nowy typ urlopu</h3>
+    <form (ngSubmit)="submitNewLeaveType()">
+      <div class="form-group">
+        <label for="caption">Nazwa Typu Urlopu</label>
+        <input type="text" id="caption" [(ngModel)]="newLeaveType.CAPTION" name="caption" required />
+      </div>
+      <div class="form-group">
+        <label for="code">Kod Typu Urlopu</label>
+        <input type="text" id="code" [(ngModel)]="newLeaveType.CODE" name="code" required />
+      </div>
+      <button type="submit" class="btn-save">Zapisz</button>
+      <button type="button" class="btn-cancel" (click)="cancelAdd()">Anuluj</button>
+    </form>
+  </div>
+
+  <!-- Tabela typów urlopów -->
+  <table class="table" *ngIf="!isAdding">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nazwa Typu</th>
+        <th>Kod Typu</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let leaveType of leaveTypes">
+        <td>{{ leaveType.ID }}</td>
+        <td>
+          <span *ngIf="!isEditing || editedLeaveType?.ID !== leaveType.ID">
+            {{ leaveType.CAPTION }}
+          </span>
+          <input *ngIf="isEditing && editedLeaveType?.ID === leaveType.ID" [(ngModel)]="editedLeaveType!.CAPTION" />
+        </td>
+        <td>
+          <span *ngIf="!isEditing || editedLeaveType?.ID !== leaveType.ID">
+            {{ leaveType.CODE }}
+          </span>
+          <input *ngIf="isEditing && editedLeaveType?.ID === leaveType.ID" [(ngModel)]="editedLeaveType!.CODE" />
+        </td>
+        <td class="actions">
+          <button class="btn-edit" (click)="startEdit(leaveType)" *ngIf="!isEditing">Edytuj</button>
+          <button class="btn-cancel" (click)="cancelEdit()" *ngIf="isEditing && editedLeaveType?.ID === leaveType.ID">Anuluj</button>
+          <button class="btn-save" (click)="saveEdit()" *ngIf="isEditing && editedLeaveType?.ID === leaveType.ID">Zapisz</button>
+          <button class="btn-delete" (click)="deleteLeaveType(leaveType.ID)">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<div>
+  <!-- Przycisk z ikoną domku -->
+  <button (click)="goToDashboard()" class="dashboard-btn">
+    <span class="material-icons">home</span>
+  </button>
+
+  <!-- Dialog i inne elementy -->
+  <app-dialog></app-dialog>
+  <router-outlet></router-outlet>
+</div>

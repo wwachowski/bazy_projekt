@@ -1,8 +1,29 @@
-<!-- src/app/components/employee-crud/employee-crud.component.html -->
 <div class="container">
-  <h2>Pracownicy</h2>
-  <button (click)="addEmployee()">Dodaj Pracownika</button>
-  <table class="table">
+  <h2 class="title">Pracownicy</h2>
+  <button class="btn-add" (click)="addEmployee()">Dodaj Pracownika</button>
+
+  <!-- Formularz dodawania pracownika -->
+  <div *ngIf="isAdding" class="add-employee-form">
+    <h3>Dodaj nowego pracownika</h3>
+    <form (ngSubmit)="submitNewEmployee()">
+      <div class="form-group">
+        <label for="userId">ID Użytkownika</label>
+        <input type="number" id="userId" [(ngModel)]="newEmployee.USER_ID" name="userId" required />
+      </div>
+      <div class="form-group">
+        <label for="employeeType">Typ Pracownika</label>
+        <select id="employeeType" [(ngModel)]="newEmployee.EMPLOYEE_TYPE" name="employeeType" required>
+          <option value="N">Normalny</option>
+          <option value="A">Administrator</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-save">Zapisz</button>
+      <button type="button" class="btn-cancel" (click)="cancelAdd()">Anuluj</button>
+    </form>
+  </div>
+
+  <!-- Tabela pracowników -->
+  <table class="table" *ngIf="!isAdding">
     <thead>
       <tr>
         <th>ID</th>
@@ -14,27 +35,19 @@
       <tr *ngFor="let employee of employees">
         <td>{{ employee.ID }}</td>
         <td>
-          <!-- Wartość typu pracownika wyświetlana jako tekst -->
           <span *ngIf="!isEditing || editedEmployee?.ID !== employee.ID">
             {{ employee.EMPLOYEE_TYPE == 'N' ? 'Normalny' : 'Administrator' }}
           </span>
-
-          <!-- Combo box w trybie edycji -->
-          <select
-            *ngIf="isEditing && editedEmployee?.ID === employee.ID"
-            [(ngModel)]="editedEmployee!.EMPLOYEE_TYPE"
-            [disabled]="!isEditing"
-          >
+          <select *ngIf="isEditing && editedEmployee?.ID === employee.ID" [(ngModel)]="editedEmployee!.EMPLOYEE_TYPE">
             <option value="N">Normalny</option>
             <option value="A">Administrator</option>
           </select>
         </td>
-        <td>
-          <!-- Przyciski edycji -->
-          <button (click)="startEdit(employee)" *ngIf="!isEditing">Edytuj</button>
-          <button (click)="cancelEdit()" *ngIf="isEditing && editedEmployee?.ID === employee.ID">Anuluj</button>
-          <button (click)="saveEdit()" *ngIf="isEditing && editedEmployee?.ID === employee.ID">Zapisz</button>
-          <button (click)="deleteEmployee(employee.ID)">Usuń</button>
+        <td class="actions">
+          <button class="btn-edit" (click)="startEdit(employee)" *ngIf="!isEditing">Edytuj</button>
+          <button class="btn-cancel" (click)="cancelEdit()" *ngIf="isEditing && editedEmployee?.ID === employee.ID">Anuluj</button>
+          <button class="btn-save" (click)="saveEdit()" *ngIf="isEditing && editedEmployee?.ID === employee.ID">Zapisz</button>
+          <button class="btn-delete" (click)="deleteEmployee(employee.ID)">Usuń</button>
         </td>
       </tr>
     </tbody>

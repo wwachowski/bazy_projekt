@@ -61,12 +61,6 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "buildOptimizer": false,
-              "sourceMap": true,
-              "optimization": false,
-              "extractCss": true,
-              "vendorChunk": true,
-              "commonChunk": true,
               "namedChunks": true,
               "stylePreprocessorOptions": {
                 "includePaths": []
